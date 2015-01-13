@@ -17,24 +17,23 @@ admin.add_view(PostAdmin(Post))
 admin.add_view(CommentAdmin(Comment))
 
 
-
-@app.route('/post/<int:post_id>')
-def show_post(post_id):
-    return 'Post %d' % post_id
-
-
 @app.route('/add')
 def show_add():
     return 'add'
 
 
 @app.route('/')
-@app.route('/page/<int:pageid>')
-def index():
-    posts = Post.select()
-    for i in posts:
-        print i.title, i.text, i.date
-    return render_template('layout.html', posts=posts)
+@app.route('/page/<int:page_id>')
+def index(page_id=1):
+    page_size = 2;
+    posts = Post.select().order_by(Post.id).paginate(page_id, page_size)
+    return render_template('index.html', posts=posts, page_id=page_id)
+
+
+@app.route('/post/<int:post_id>')
+def post(post_id=1):
+    post = Post.select().where(Post.id == post_id)
+    return render_template('post.html', post=post.get())
 
 
 @app.route('/login', methods=['GET', 'POST'])

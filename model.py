@@ -37,7 +37,7 @@ class UserInfo(BaseModel):
 class Post(BaseModel):
     title = peewee.CharField(max_length=120)
     text = peewee.TextField(null=False)
-    date = peewee.DateTimeField()
+    created_at = peewee.DateTimeField()
 
     user = peewee.ForeignKeyField(User)
 
@@ -73,14 +73,14 @@ class PostAdmin(ModelView):
 
     # List of columns that can be sorted. For 'user' column, use User.email as
     # a column.
-    column_sortable_list = ('title', ('user', User.email), 'date')
+    column_sortable_list = ('title', ('user', User.email), 'created_at')
 
     # Full text search
     column_searchable_list = ('title', User.username)
 
     # Column filters
     column_filters = ('title',
-                      'date',
+                      'created_at',
                       User.username)
 
     form_ajax_refs = {
