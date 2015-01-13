@@ -2,7 +2,7 @@
 # -*- coding:utf-8 -*-
 
 
-from flask import request, session, redirect, flash, render_template, url_for
+from flask import request, session, redirect, flash, render_template, url_for, abort
 # from admin import *
 
 
@@ -17,24 +17,21 @@ admin.add_view(PostAdmin(Post))
 admin.add_view(CommentAdmin(Comment))
 
 
-@app.route('/add')
-def show_add():
-    return 'add'
-
-
 @app.route('/')
 @app.route('/page/<int:page_id>')
 def index(page_id=1):
     page_size = 2;
     posts = Post.select().order_by(Post.id).paginate(page_id, page_size)
     total = Post.select().count()
-    if posts.count():
-        if posts.count() % page_size:
-            page_count = total / page_size
-        else:
-            page_count = total / page_size + 1
+
+    if total % page_size:
+        page_count = total / page_size + 1
     else:
-        page_count = page_id
+        page_count = total / page_size
+
+    if page_id > page_count:
+        abort(404)
+
     return render_template('index.html', posts=posts, page_id=page_id, page_count=page_count)
 
 

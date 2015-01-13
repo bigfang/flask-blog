@@ -10,7 +10,7 @@
         {% else %}
             <li><a href="/page/{{ page_id - 1 }}" class="btn btn-lg">Previous</a></li>
         {% endif %}
-        {% if page_id == page_count + 1 %}
+        {% if page_id == page_count %}
             <li><a href="" class="btn btn-lg disabled">Next</a></li>
         {% else %}
             <li><a href="/page/{{ page_id + 1 }}" class="btn btn-lg">Next</a></li>
