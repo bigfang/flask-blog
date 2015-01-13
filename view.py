@@ -3,7 +3,19 @@
 
 
 from flask import request, session, redirect, flash, render_template, url_for
-from admin import *
+# from admin import *
+
+
+
+from flask.ext import admin
+from model import *
+
+admin = admin.Admin(app, name='Admin')
+
+admin.add_view(UserAdmin(User))
+admin.add_view(PostAdmin(Post))
+admin.add_view(CommentAdmin(Comment))
+
 
 
 @app.route('/post/<int:post_id>')
@@ -19,7 +31,10 @@ def show_add():
 @app.route('/')
 @app.route('/page/<int:pageid>')
 def index():
-    return render_template('index.html')
+    posts = Post.select()
+    for i in posts:
+        print i.title, i.text, i.date
+    return render_template('layout.html', posts=posts)
 
 
 @app.route('/login', methods=['GET', 'POST'])

@@ -1,0 +1,9 @@
+{% for post in posts %}
+<div class="blog-post">
+    <h2 class="blog-post-title">{{ post.title }}</h2>
+
+    <p class="blog-post-meta">{{ post.date }}</p>
+
+    <div>{{ post.text }}</div>
+</div>
+{% endfor %}
