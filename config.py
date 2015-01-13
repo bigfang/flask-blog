@@ -10,3 +10,5 @@ SECRET_KEY = '123456790'
 
 USERNAME = 'admin'
 PASSWORD = 'admin'
+
+PAGE_SIZE = 3

@@ -6,14 +6,15 @@
 <nav>
     <ul class="pager">
         {% if page_id == 1 %}
-            <li><a href="" class="btn btn-lg disabled">First</a></li>
+        <li class="previous disabled"><a href="#"><span aria-hidden="true">&larr;</span> Previous</a></li>
         {% else %}
-            <li><a href="/page/{{ page_id - 1 }}" class="btn btn-lg">Previous</a></li>
+        <li class="previous "><a href="/page/{{ page_id - 1 }}"><span aria-hidden="true">&larr;</span> Previous</a></li>
         {% endif %}
+
         {% if page_id == page_count %}
-            <li><a href="" class="btn btn-lg disabled">Next</a></li>
+        <li class="next disabled"><a href="#">Next <span aria-hidden="true">&rarr;</span></a></li>
         {% else %}
-            <li><a href="/page/{{ page_id + 1 }}" class="btn btn-lg">Next</a></li>
+        <li class="next"><a href="/page/{{ page_id + 1 }}">Next <span aria-hidden="true">&rarr;</span></a></li>
         {% endif %}
     </ul>
 </nav>

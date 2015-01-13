@@ -2,10 +2,13 @@
 # -*- coding:utf-8 -*-
 
 
-import peewee
+import datetime
 
+import peewee
 from flask.ext.admin.contrib.peewee import ModelView
+
 from app import app
+
 
 db = peewee.SqliteDatabase(app.config.get('DATABASE'), check_same_thread=False)
 
@@ -37,7 +40,7 @@ class UserInfo(BaseModel):
 class Post(BaseModel):
     title = peewee.CharField(max_length=120)
     text = peewee.TextField(null=False)
-    created_at = peewee.DateTimeField()
+    created_at = peewee.DateTimeField(default=datetime.datetime.now)
 
     user = peewee.ForeignKeyField(User)
 
@@ -46,17 +49,17 @@ class Post(BaseModel):
 
 
 class Comment(BaseModel):
-    title = peewee.CharField(max_length=120)
     text = peewee.TextField(null=False)
-    date = peewee.DateTimeField()
+    created_at = peewee.DateTimeField(default=datetime.datetime.now)
 
     user = peewee.CharField(max_length=80)
     email = peewee.CharField(max_length=120)
+    url = peewee.CharField(max_length=120)
 
     post = peewee.ForeignKeyField(Post)
 
     def __unicode__(self):
-        return self.title
+        return self.user
 
 
 class UserAdmin(ModelView):
