@@ -27,7 +27,15 @@ def show_add():
 def index(page_id=1):
     page_size = 2;
     posts = Post.select().order_by(Post.id).paginate(page_id, page_size)
-    return render_template('index.html', posts=posts, page_id=page_id)
+    total = Post.select().count()
+    if posts.count():
+        if posts.count() % page_size:
+            page_count = total / page_size
+        else:
+            page_count = total / page_size + 1
+    else:
+        page_count = page_id
+    return render_template('index.html', posts=posts, page_id=page_id, page_count=page_count)
 
 
 @app.route('/post/<int:post_id>')
