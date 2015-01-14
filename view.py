@@ -4,7 +4,7 @@
 
 from datetime import datetime
 
-from flask import request, session, redirect, flash, render_template, url_for, abort
+from flask import request, render_template, abort
 from flask.ext import admin
 
 from model import UserAdmin, User, Post, PostAdmin, Comment, CommentAdmin
@@ -22,7 +22,6 @@ admin.add_view(CommentAdmin(Comment))
 @app.route('/page/<int:page_id>')
 def index(page_id=1):
     page_size = app.config.get('PAGE_SIZE')
-    posts = Post.select().order_by(Post.id).paginate(page_id, page_size)
     total = Post.select().count()
 
     if total == 0:
@@ -36,12 +35,17 @@ def index(page_id=1):
     if page_id > page_count:
         abort(404)
 
+    posts = Post.select().order_by(Post.id).paginate(page_id, page_size)
+
     return render_template('index.html', posts=posts, page_id=page_id, page_count=page_count)
 
 
 @app.route('/post/<int:post_id>')
 def post(post_id=1):
-    post = Post.select().where(Post.id == post_id).get()
+    try:
+        post = Post.select().where(Post.id == post_id).get()
+    except:
+        abort(404)
     comments = Comment.select().where(Comment.post == post_id)
     return render_template('post.html', post=post, comments=comments)
 
@@ -57,3 +61,13 @@ def new_comment():
     Comment.create(user=user, email=email, url=site, text=content, post=post_id,
                    created_at=datetime.strftime(datetime.now(), '%Y-%m-%d %H:%M'))
     return "successs"
+
+
+@app.errorhandler(404)
+def page_not_found(error):
+    return render_template('404.html'), 404
+
+
+@app.errorhandler(500)
+def internal_error(error):
+    return render_template('50x.html'), 500
