@@ -55,7 +55,8 @@ def new_comment():
     post_id = request.form.get('post', None)
 
     Comment.create(user=user, email=email, url=site, text=content, post=post_id,
-                   created_at=datetime.strftime(datetime.now(), '%Y-%m-%d %H:%M:%S'))
+                   created_at=datetime.strftime(datetime.now(), '%Y-%m-%d %H:%M'))
+    return "ppp"
 
 
 @app.route('/login', methods=['GET', 'POST'])

@@ -2,7 +2,7 @@
 # -*- coding:utf-8 -*-
 
 
-import datetime
+from datetime import datetime
 
 import peewee
 from flask.ext.admin.contrib.peewee import ModelView
@@ -40,7 +40,7 @@ class UserInfo(BaseModel):
 class Post(BaseModel):
     title = peewee.CharField(max_length=120)
     text = peewee.TextField(null=False)
-    created_at = peewee.DateTimeField(default=datetime.datetime.now)
+    created_at = peewee.DateTimeField(default=datetime.now)
 
     user = peewee.ForeignKeyField(User)
 
@@ -49,12 +49,11 @@ class Post(BaseModel):
 
 
 class Comment(BaseModel):
-    text = peewee.TextField(null=False)
-    created_at = peewee.DateTimeField(default=datetime.datetime.now)
-
     user = peewee.CharField(max_length=80)
     email = peewee.CharField(max_length=120)
     url = peewee.CharField(max_length=120)
+    text = peewee.TextField(null=False)
+    created_at = peewee.DateTimeField(default=datetime.now)
 
     post = peewee.ForeignKeyField(Post)
 
