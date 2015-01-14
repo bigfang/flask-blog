@@ -2,7 +2,16 @@
 
 {% block content %}
 
-{% include 'list.html' %}
+{% for post in posts %}
+<div class="blog-post">
+    <h2 class="blog-post-title"><a href="/post/{{ post.id }}">{{ post.title }}</a></h2>
+
+    <p class="blog-post-meta">{{ post.created_at }}</p>
+
+    <div class="blog-content">{{ post.text }}</div>
+</div>
+{% endfor %}
+
 <nav>
     <ul class="pager">
         {% if page_id == 1 %}
