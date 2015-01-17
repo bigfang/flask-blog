@@ -67,6 +67,9 @@ class Up(BaseModel):
 
     post = peewee.ForeignKeyField(Post)
 
+    class Meta:
+        primary_key = peewee.CompositeKey('ip', 'post')
+
 
 class UserAdmin(ModelView):
     inline_models = (UserInfo,)
