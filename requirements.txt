@@ -2,3 +2,4 @@ Flask
 Flask-Admin
 # Flask-Login
 peewee
+wtf-peewee

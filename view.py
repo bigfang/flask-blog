@@ -5,14 +5,14 @@
 from datetime import datetime
 
 from flask import request, render_template, abort
-from flask.ext import admin
+from flask.ext.admin import Admin
 
-from model import UserAdmin, PostAdmin, CommentAdmin
-from controller import *
+from model import UserAdmin, PostAdmin, CommentAdmin, User, Post, Comment
+from controller import up
 from app import app
 
 
-admin = admin.Admin(app, name='Admin')
+admin = Admin(app, name='Admin')
 
 admin.add_view(UserAdmin(User))
 admin.add_view(PostAdmin(Post))
