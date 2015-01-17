@@ -4,7 +4,13 @@
 <div class="blog-post">
     <h2 class="blog-post-title"><a href="/post/{{ post.id }}">{{ post.title }}</a></h2>
 
-    <p class="blog-post-meta">{{ post.created_at }}</p>
+    <p class="blog-post-meta">
+        {{ post.created_at }}
+        <span class="up label label-primary">
+            <span class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span>
+            <span class="count">{{post.up_time}}</span>
+        </span>
+    </p>
 
     <div class="blog-content">{{ post.text }}</div>
 </div>
@@ -28,6 +34,13 @@
 $(function(){
 	$("#comment-form").ajaxForm(function(res) {
 	    $(".comment-list").append(res);
+	});
+
+	$(".blog-post-meta .up").bind("click", function() {
+	    var self = this;
+        $.post("/up", {post_id: location.pathname.split('/')[2]}, function(res) {
+            $(".count").text(res)
+        });
 	});
 })
 </script>

@@ -41,6 +41,7 @@ class Post(BaseModel):
     title = peewee.CharField(max_length=120)
     text = peewee.TextField(null=False)
     created_at = peewee.DateTimeField(default=datetime.now)
+    up_time = peewee.IntegerField(default=0)
 
     user = peewee.ForeignKeyField(User)
 
@@ -59,6 +60,12 @@ class Comment(BaseModel):
 
     def __unicode__(self):
         return self.user
+
+
+class Up(BaseModel):
+    ip = peewee.CharField(max_length=15)
+
+    post = peewee.ForeignKeyField(Post)
 
 
 class UserAdmin(ModelView):
@@ -98,5 +105,6 @@ if __name__ == '__main__':
         UserInfo.create_table()
         Post.create_table()
         Comment.create_table()
+        Up.create_table()
     except:
         pass

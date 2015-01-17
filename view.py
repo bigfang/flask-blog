@@ -7,7 +7,8 @@ from datetime import datetime
 from flask import request, render_template, abort
 from flask.ext import admin
 
-from model import UserAdmin, User, Post, PostAdmin, Comment, CommentAdmin
+from model import UserAdmin, PostAdmin, CommentAdmin
+from controller import *
 from app import app
 
 
@@ -50,7 +51,7 @@ def post(post_id=1):
     return render_template('post.html', post=post, comments=comments)
 
 
-@app.route('/comment/new', methods=['POST'])
+@app.route('/comment', methods=['POST'])
 def new_comment():
     user = request.form.get('user', '')
     email = request.form.get('email', '')
@@ -61,6 +62,14 @@ def new_comment():
     Comment.create(user=user, email=email, url=site, text=content, post=post_id,
                    created_at=datetime.strftime(datetime.now(), '%Y-%m-%d %H:%M'))
     return render_template('comment.html', comments=Comment.select().order_by(Comment.id.desc()).limit(1))
+
+
+@app.route('/up', methods=['POST'])
+def vote_up():
+    post_id = request.form.get('post_id', 1)
+    ip = request.environ['REMOTE_ADDR']
+    num = up(post_id, ip)
+    return str(num)
 
 
 @app.errorhandler(404)
