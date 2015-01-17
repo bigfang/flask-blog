@@ -60,7 +60,7 @@ def new_comment():
 
     Comment.create(user=user, email=email, url=site, text=content, post=post_id,
                    created_at=datetime.strftime(datetime.now(), '%Y-%m-%d %H:%M'))
-    return "successs"
+    return render_template('comment.html', comments=Comment.select().order_by(Comment.id.desc()).limit(1))
 
 
 @app.errorhandler(404)

@@ -10,19 +10,9 @@
 </div>
 
 <div class="blog-comment">
-    {% for comment in comments %}
-    <div class="comment-item">
-        <div class="comment-info">
-            <span><a href="{{ comment.url }}">{{ comment.user }}</a></span>
-            <span><small>{{ comment.created_at }}</small></span>
-        </div>
-
-        <h4>
-            <small>{{ comment.text }}</small>
-        </h4>
+    <div class="comment-list">
+        {% include "comment.html" %}
     </div>
-
-    {% endfor %}
 
     <div class="comment-form">
         {% include "comment_form.html" %}
@@ -36,8 +26,8 @@
 <script src="/static/js/jquery.form.min.js"></script>
 <script language="JavaScript">
 $(function(){
-	$("#comment-form").ajaxForm(function() {
-	    location.reload();
+	$("#comment-form").ajaxForm(function(res) {
+	    $(".comment-list").append(res);
 	});
 })
 </script>

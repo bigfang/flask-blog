@@ -1,0 +1,12 @@
+{% for comment in comments %}
+<div class="comment-item">
+    <div class="comment-info">
+        <span><a href="{{ comment.url }}">{{ comment.user }}</a></span>
+        <span><small>{{ comment.created_at }}</small></span>
+    </div>
+
+    <h4>
+        <small>{{ comment.text }}</small>
+    </h4>
+</div>
+{% endfor %}
