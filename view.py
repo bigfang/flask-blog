@@ -51,8 +51,9 @@ def post(post_id=1):
         post = Post.select().where(Post.id == post_id).get()
     except:
         abort(404)
-    comments = Comment.select().where(Comment.post == post_id)
-    return render_template('post.html', post=post, comments=comments)
+    else:
+        comments = Comment.select().where(Comment.post == post_id)
+        return render_template('post.html', post=post, comments=comments)
 
 
 @app.route('/comment', methods=['POST'])
