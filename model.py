@@ -83,6 +83,10 @@ class CommentAdmin(ModelView):
     pass
 
 
+class SensitiveAdmin(ModelView):
+    pass
+
+
 class PostAdmin(ModelView):
     # Visible columns in the list view
     column_exclude_list = ['text']
@@ -114,5 +118,7 @@ if __name__ == '__main__':
         Comment.create_table()
         Up.create_table()
         Sensitive.create_table()
-    except:
-        pass
+        User.create(username='user', email='fake@fake', password='test')
+        Sensitive.create(word='庆丰')
+    except Exception, err:
+        print err

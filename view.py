@@ -6,10 +6,10 @@ from datetime import datetime
 import os.path as op
 
 from flask import request, render_template, abort
+
 from flask.ext.admin import Admin
 from flask.ext.admin.contrib.fileadmin import FileAdmin
-
-from model import UserAdmin, PostAdmin, CommentAdmin, User, Post, Comment
+from model import UserAdmin, PostAdmin, CommentAdmin, SensitiveAdmin, User, Post, Comment, Sensitive
 from controller import up, comment_check
 from app import app
 
@@ -19,6 +19,7 @@ admin = Admin(app, name='Admin')
 admin.add_view(UserAdmin(User))
 admin.add_view(PostAdmin(Post))
 admin.add_view(CommentAdmin(Comment))
+admin.add_view(SensitiveAdmin(Sensitive))
 path = op.join(op.dirname(__file__), 'upload')
 admin.add_view(FileAdmin(path, '/upload/', name='Uploaded Files'))
 

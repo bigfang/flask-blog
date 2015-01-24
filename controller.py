@@ -46,8 +46,9 @@ def duplicate_check(content):
 
 
 def sensitive_check(content):
-    ret = content
-    return ret
+    for word in sensitive_list:
+        content = content.replace(word, '*'*len(word))
+    return content
 
 
 def comment_check(content):
