@@ -10,7 +10,7 @@ from flask.ext.admin import Admin
 from flask.ext.admin.contrib.fileadmin import FileAdmin
 
 from model import UserAdmin, PostAdmin, CommentAdmin, User, Post, Comment
-from controller import up
+from controller import up, comment_check
 from app import app
 
 
@@ -64,9 +64,13 @@ def new_comment():
     content = request.form.get('content', '')
     post_id = request.form.get('post', None)
 
-    Comment.create(user=user, email=email, url=site, text=content, post=post_id,
-                   created_at=datetime.strftime(datetime.now(), '%Y-%m-%d %H:%M'))
-    return render_template('comment.html', comments=Comment.select().order_by(Comment.id.desc()).limit(1))
+    checked_content = comment_check(content)
+    if checked_content:
+        Comment.create(user=user, email=email, url=site, text=checked_content, post=post_id,
+                       created_at=datetime.strftime(datetime.now(), '%Y-%m-%d %H:%M'))
+        return render_template('comment.html', comments=Comment.select().order_by(Comment.id.desc()).limit(1))
+    else:
+        return 'spam'
 
 
 @app.route('/up', methods=['POST'])
