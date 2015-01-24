@@ -9,3 +9,5 @@ DATABASE = 'test.sqlite'
 SECRET_KEY = '123456790'
 
 PAGE_SIZE = 3
+
+Q_MAX_SIZE = 10

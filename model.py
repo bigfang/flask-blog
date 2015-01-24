@@ -59,7 +59,7 @@ class Comment(BaseModel):
     post = peewee.ForeignKeyField(Post)
 
     def __unicode__(self):
-        return self.user
+        return self.text
 
 
 class Up(BaseModel):

@@ -8,6 +8,12 @@ from model import User, Post, Comment, Up
 from app import app
 
 
+dup_check_list = [0]
+pre_comment = Comment.select().order_by(Comment.created_at.desc()).limit(app.config.get('Q_MAX_SIZE'))
+for item in pre_comment:
+    dup_check_list.append(item.text)
+
+
 def up(post_id, ip):
     record = Post.select().where(Post.id == post_id).get()
 
@@ -25,7 +31,12 @@ def up(post_id, ip):
 
 
 def duplicate_check(content):
-    return content
+    if content in dup_check_list:
+        return None
+    else:
+        dup_check_list.pop(0)
+        dup_check_list.append(content)
+        return content
 
 
 def sensitive_check(content):

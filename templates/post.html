@@ -32,16 +32,20 @@
 <script src="/static/js/jquery.form.min.js"></script>
 <script language="JavaScript">
 $(function(){
-	$("#comment-form").ajaxForm(function(res) {
-	    $(".comment-list").append(res);
-	});
+    $("#comment-form").ajaxForm(function(res) {
+        if (res == 'spam') {
+            alert('疑似垃圾信息')
+        } else {
+            $(".comment-list").append(res);
+        }
+    });
 
-	$(".blog-post-meta .up").bind("click", function() {
-	    var self = this;
+    $(".blog-post-meta .up").bind("click", function() {
+        var self = this;
         $.post("/up", {post_id: location.pathname.split('/')[2]}, function(res) {
             $(".count").text(res)
         });
-	});
+    });
 })
 </script>
 {% endblock %}
