@@ -62,6 +62,10 @@ class Comment(BaseModel):
         return self.text
 
 
+class Sensitive(BaseModel):
+    word = peewee.CharField(max_length=8)
+
+
 class Up(BaseModel):
     ip = peewee.CharField(max_length=15)
 
@@ -109,5 +113,6 @@ if __name__ == '__main__':
         Post.create_table()
         Comment.create_table()
         Up.create_table()
+        Sensitive.create_table()
     except:
         pass

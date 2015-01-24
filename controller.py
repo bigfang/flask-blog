@@ -4,14 +4,20 @@
 
 from peewee import IntegrityError
 
-from model import User, Post, Comment, Up
+from model import User, Post, Comment, Up, Sensitive
 from app import app
 
 
-dup_check_list = [0]
-pre_comment = Comment.select().order_by(Comment.created_at.desc()).limit(app.config.get('Q_MAX_SIZE'))
-for item in pre_comment:
-    dup_check_list.append(item.text)
+try:
+    dup_check_list = range(app.config.get('DUP_MAX_SIZE'))
+    pre_comment = Comment.select().order_by(Comment.created_at.desc()).limit(app.config.get('DUP_MAX_SIZE'))
+    for item in pre_comment:
+        dup_check_list.pop(0)
+        dup_check_list.append(item.text)
+
+    sensitive_list = [i.word for i in Sensitive.select()]
+except Exception, err:
+    app.logger.warning(err)
 
 
 def up(post_id, ip):
