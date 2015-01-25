@@ -10,7 +10,7 @@ from flask import request, render_template, abort
 from flask.ext.admin import Admin
 from flask.ext.admin.contrib.fileadmin import FileAdmin
 from model import UserAdmin, PostAdmin, CommentAdmin, SensitiveAdmin, User, Post, Comment, Sensitive
-from controller import up, comment_check
+from controller import up, duplicate_check, sensitive_check
 from app import app
 
 
@@ -54,7 +54,9 @@ def post(post_id=1):
         abort(404)
     else:
         comments = Comment.select().where(Comment.post == post_id)
-        return render_template('post.html', post=post, comments=comments)
+        checked_comments = [{'user': i.user, 'email': i.email, 'url': i.url, 'text': sensitive_check(i.text),
+                             'created_at': datetime.strftime(i.created_at, '%Y-%m-%d %H:%M')} for i in comments]
+        return render_template('post.html', post=post, comments=checked_comments)
 
 
 @app.route('/comment', methods=['POST'])
@@ -65,10 +67,9 @@ def new_comment():
     content = request.form.get('content', '')
     post_id = request.form.get('post', None)
 
-    checked_content = comment_check(content)
+    checked_content = duplicate_check(content)
     if checked_content:
-        Comment.create(user=user, email=email, url=site, text=checked_content, post=post_id,
-                       created_at=datetime.strftime(datetime.now(), '%Y-%m-%d %H:%M'))
+        Comment.create(user=user, email=email, url=site, text=checked_content, post=post_id)
         return render_template('comment.html', comments=Comment.select().order_by(Comment.id.desc()).limit(1))
     else:
         return 'spam'
