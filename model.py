@@ -55,6 +55,7 @@ class Comment(BaseModel):
     url = peewee.CharField(max_length=120)
     text = peewee.TextField(null=False)
     created_at = peewee.DateTimeField(default=datetime.now)
+    ip = peewee.CharField(max_length=15)
 
     post = peewee.ForeignKeyField(Post)
 

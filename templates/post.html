@@ -35,6 +35,8 @@ $(function(){
     $("#comment-form").ajaxForm(function(res) {
         if (res == 'spam') {
             alert('疑似垃圾信息')
+        } else if (res == 'interval') {
+            alert('请勿频繁发送')
         } else {
             $(".comment-list").append(res);
         }

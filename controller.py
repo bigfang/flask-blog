@@ -16,6 +16,11 @@ try:
         dup_check_list.append(item.text)
 
     sensitive_list = [i.word for i in Sensitive.select()]
+
+    recent_comments = Comment.select() \
+        .group_by(Comment.ip) \
+        .order_by(Comment.created_at.desc()) \
+        .limit(app.config.get('RCTC_MAX_SIZE'))
 except Exception, err:
     app.logger.warning(err)
 
@@ -47,7 +52,7 @@ def duplicate_check(content):
 
 def sensitive_check(content):
     for word in sensitive_list:
-        content = content.replace(word, '*'*len(word))
+        content = content.replace(word, '*' * len(word))
     return content
 
 

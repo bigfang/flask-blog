@@ -2,16 +2,17 @@
 # -*- coding:utf-8 -*-
 
 
-from datetime import datetime
+from datetime import datetime, timedelta
 import os.path as op
 
-from flask import request, render_template, abort
+from flask import request, render_template, abort, session
 
 from flask.ext.admin import Admin
 from flask.ext.admin.contrib.fileadmin import FileAdmin
 from model import UserAdmin, PostAdmin, CommentAdmin, SensitiveAdmin, User, Post, Comment, Sensitive
 from controller import up, duplicate_check, sensitive_check
 from app import app
+from utils import last_comment
 
 
 admin = Admin(app, name='Admin')
@@ -47,6 +48,7 @@ def index(page_id=1):
 
 
 @app.route('/post/<int:post_id>')
+@last_comment
 def post(post_id=1):
     try:
         post = Post.select().where(Post.id == post_id).get()
@@ -60,18 +62,25 @@ def post(post_id=1):
 
 
 @app.route('/comment', methods=['POST'])
+@last_comment
 def new_comment():
     user = request.form.get('user', '')
     email = request.form.get('email', '')
     site = request.form.get('site', '')
     content = request.form.get('content', '')
     post_id = request.form.get('post', None)
+    ip = request.environ['REMOTE_ADDR']
+
+    interval = (datetime.now() - session['last_comment_at']).total_seconds()
+    if interval < app.config.get('MAX_INTERVAL'):
+        return 'interval'
 
     checked_content = duplicate_check(content)
     if checked_content:
-        Comment.create(user=user, email=email, url=site, text=checked_content, post=post_id)
+        Comment.create(user=user, email=email, url=site, text=checked_content, post=post_id, ip=ip)
         return render_template('comment.html',
-                               comments=[{'user': user, 'email': email, 'url': site, 'post': post_id,
+                               comments=[{'user': user, 'url': site, 'post': post_id,
+                                          'created_at': datetime.strftime(datetime.now(), '%Y-%m-%d %H:%M'),
                                           'text': sensitive_check(checked_content)}])
     else:
         return 'spam'
