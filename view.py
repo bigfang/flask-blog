@@ -70,7 +70,9 @@ def new_comment():
     checked_content = duplicate_check(content)
     if checked_content:
         Comment.create(user=user, email=email, url=site, text=checked_content, post=post_id)
-        return render_template('comment.html', comments=Comment.select().order_by(Comment.id.desc()).limit(1))
+        return render_template('comment.html',
+                               comments=[{'user': user, 'email': email, 'url': site, 'post': post_id,
+                                          'text': sensitive_check(checked_content)}])
     else:
         return 'spam'
 
